@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1.0">
+        <meta name="description" content="A conversational AI system that listens, learns, and challenges">
+        <meta property="og:title" content="ChatGPT">
+        <meta property="og:image" content="https://openai.com/content/images/2022/11/ChatGPT.jpg">
+        <meta property="og:description" content="A conversational AI system that listens, learns, and challenges">
+        <meta property="og:url" content="https://chat.acy.dev">
+        <link rel="stylesheet" href="../css/style.css">
+        <link rel="apple-touch-icon" sizes="180x180" href="../img/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="../img/favicon-16x16.png">
+        <link rel="manifest" href="/img/site.webmanifest">
+        <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="../js/icons.js"></script>
+        <script src="../js/chat.js" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/markdown-it@latest/dist/markdown-it.min.js"></script>
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@latest/build/styles/base16/dracula.min.css">
+        <script>
+            const user_image        = `<img src="../img/user.png" alt="User Avatar">`;
+            const gpt_image         = `<img src="../img/gpt.png" alt="GPT Avatar">`;
+        </script>
+        <style>
+            .hljs {
+                color: #e9e9f4;
+                background: #28293629;
+                border-radius: var(--border-radius-1);
+                border: 1px solid var(--blur-border);
+                font-size: 15px;
+            }
+
+            #message-input {
+                margin-right: 30px;
+                height: 80px;
+            }
+
+            #message-input::-webkit-scrollbar {
+                width: 5px;
+            }
+
+            /* Track */
+            #message-input::-webkit-scrollbar-track {
+                background: #f1f1f1; 
+            }
+            
+            /* Handle */
+            #message-input::-webkit-scrollbar-thumb {
+                background: #c7a2ff; 
+            }
+
+            /* Handle on hover */
+            #message-input::-webkit-scrollbar-thumb:hover {
+                background: #8b3dff; 
+            }
+        </style>
+        <script src="../js/highlight.min.js"></script>
+        <script src="../js/highlightjs-copy.min.js"></script>
+        <script>window.conversation_id = `{{chat_id}}`</script>
+        <title>ChatGPT</title>
+    </head>
+    <body>
+        <div class="gradient"></div>
+        <div class="row">
+            <div class="box conversations">
+                <div class="izhitong">
+                    <h2>医通达(MediEase)</h2>
+                   <span>——智能医疗问答应用</span>
+                </div>
+                <div class="top">
+                    <button class="new_convo" onclick="new_conversation()">
+                        <i class="fa-regular fa-plus"></i>
+                        <span>新建聊天</span>
+                    </button>
+                    <div class="spinner"></div>
+                </div>
+                <div class="bottom_buttons">
+                    <button onclick="delete_conversations()">
+                        <i class="fa-regular fa-trash"></i>
+                        <span>清空对话</span>
+                    </button>
+<!--                    <div class="info">-->
+<!--                        &lt;!&ndash; <i class="fa-regular fa-circle-info"></i> &ndash;&gt;-->
+<!--                        <i class="fa-sharp fa-regular fa-suitcase-medical fa-2xl"></i>-->
+<!--                        <span class="convo-title">-->
+<!--                            &lt;!&ndash; By: @xtekky<br>-->
+<!--                            Version: 0.0.1-beta<br>-->
+<!--                            Release: 2023-04-18<br> &ndash;&gt;-->
+<!--                            <br>将文件拖至此处,<br>或点击上传<br><br>-->
+<!--                        </span>-->
+<!--                    </div>-->
+                </div>
+            </div>
+            <div class="conversation disable-scrollbars">
+                <div class="stop_generating stop_generating-hidden">
+<!--                    <button id="cancelButton">-->
+<!--                        <span>Stop Generating</span>-->
+<!--                        <i class="fa-regular fa-stop"></i>-->
+<!--                    </button>-->
+                </div>
+                <div class="box beijing2" id="messages">
+                    <!-- <img src="/img/背景2.jpg" height="100%" width="100%" class="beijing2"> -->
+                </div>
+                <div class="user-input">
+                    <div class="box input-box">
+                        <textarea id="message-input" placeholder="询问医疗问题" cols="30" rows="10" style="white-space: pre-wrap;" oninput="resizeTextarea(this)"></textarea>
+                        <div id="send-button">
+                            <i class="fa-regular fa-paper-plane-top"></i>
+                           
+                        </div> 
+                        <!-- <img src="/img/心率线条.png" class="fiel-selection" width="20px" height="20px"> -->
+                        <!-- <img src="/img/救护车线条.jpg" class="ambulance-line" width="100%" height="100%"> -->
+                    </div>
+                </div>
+                <div class="buttons">
+<!--                    <div class="field">-->
+<!--                        <input type="checkbox" id="switch"/>-->
+<!--                        <label for="switch"></label>-->
+<!--                        <span class="about">Web Access</span>-->
+<!--                    </div>-->
+<!--                    <div class="field">-->
+<!--                        <select name="model" id="model" class="model">-->
+<!--                            <option value="gpt-3.5-turbo" selected>gpt-3.5-turbo</option>-->
+<!--                            &lt;!&ndash; <option value="gpt-4">gpt-4</option>-->
+<!--                            <option value="gpt-3.5-turbo-0301">gpt-3.5-turbo-0301</option>-->
+<!--                            <option value="gpt-4-0314">gpt-4-0314</option> &ndash;&gt;-->
+<!--                        </select>-->
+<!--                        &lt;!&ndash; <span class="about">Model</span> &ndash;&gt;-->
+<!--                    </div>-->
+<!--                    <div class="field">-->
+<!--                        <select name="jailbreak" id="jailbreak" class="jailbreak">-->
+<!--                            <option value="default" selected>default</option>-->
+<!--                            &lt;!&ndash; <option value="gpt-math-1.0">math 1.0</option>-->
+<!--                            <option value="gpt-dude-1.0">dude 1.0</option>-->
+<!--                            <option value="gpt-dan-1.0">dan 1.0</option>-->
+<!--                            <option value="gpt-dan-2.0">dan 2.0</option>-->
+<!--                            <option value="gpt-dev-2.0">dev 2.0</option>-->
+<!--                            <option value="gpt-evil-1.0">evil 1.0</option> &ndash;&gt;-->
+<!--                        </select>-->
+<!--                    </div>-->
+
+                <form class="color-picker" action="">
+                    <fieldset>
+                        <legend class="visually-hidden">Pick a color scheme</legend>
+                        <label for="light" class="visually-hidden">Light</label>
+                        <input type="radio" title="light" name="theme" id="light" checked>
+
+                        <label for="pink" class="visually-hidden">Pink theme</label>
+                        <input type="radio" title="pink" id="pink" name="theme">
+
+                        <label for="blue" class="visually-hidden">Blue theme</label>
+                        <input type="radio" title="blue" id="blue" name="theme">
+
+                        <label for="green" class="visually-hidden">Green theme</label>
+                        <input type="radio" title="green" id="green" name="theme">
+
+                        <label for="dark" class="visually-hidden">Dark theme</label>
+                        <input type="radio" title="dark" id="dark" name="theme">
+                    </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="mobile-sidebar">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+    </body>
+</html>
+
+<!-- <script>
+    var timeout = null;
+
+    function resizeTextarea(textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px';
+    }
+
+    $(document).ready(function() {
+        $('#message-input').on('input', function() {
+            clearTimeout(timeout);
+            timeout = setTimeout(sendRequest, 1000);  // 用户停止输入1秒后发送请求
+        });
+
+        $('#send-button').click(function() {
+            clearTimeout(timeout);
+            sendRequest();
+        });
+
+        $('#message-input').keydown(function(e) {
+            if (e.keyCode == 13 && !e.shiftKey) {
+                e.preventDefault();
+                clearTimeout(timeout);
+                sendRequest();
+            }
+        });
+
+        function sendRequest() {
+            var userInput = $('#message-input').val();
+
+            if (userInput) {
+                $.ajax({
+                    url: "http://47.236.98.162/chat",
+                    type: "POST",
+                    data: {
+                        input: userInput
+                    },
+                    success: function(response) {
+                        console.log(response);
+                    },
+                    error: function(error) {
+                        console.log("Error: ", error);
+                    }
+                });
+
+                $('#message-input').val('');  // 清空输入框
+            }
+        }
+    });
+</script> -->
