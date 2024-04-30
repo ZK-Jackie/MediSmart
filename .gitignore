@@ -78,8 +78,8 @@ fabric.properties
 .mtj.tmp/
 
 # Package Files #
-*.jar
-*.war
+#*.jar
+#*.war
 *.nar
 *.ear
 *.zip
@@ -259,5 +259,5 @@ dist
 
 ### neo4j database
 neo4j-medismart/
-**/key.yml
-**/env.yml
+**/*key.yml
+**/*env.yml
