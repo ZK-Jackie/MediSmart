@@ -2,7 +2,7 @@ server:
   port: 8081
 spring:
   config:
-    import: classpath:servekey.yml
+    import: classpath:application-dev.yml
 mybatis-plus:
   configuration:
     # 驼峰命名
