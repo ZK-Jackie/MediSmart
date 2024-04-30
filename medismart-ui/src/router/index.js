@@ -12,7 +12,7 @@ const routes = [
   {
     path: '/chat',
     name: 'chat',
-    component: () => import('../views/room/chat.vue')
+    component: () => import('../views/room/index.vue')
   },
   {
     path: '/graph',
@@ -29,11 +29,6 @@ const routes = [
     name: 'user',
     component: () => import('../views/user/profile')
   },
-  {
-    path: '/test',
-    name: 'test',
-    component: () => import('../views/room/index')
-  }
 ]
 
 // 防止连续点击多次路由报错
