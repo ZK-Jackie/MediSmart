@@ -259,5 +259,5 @@ dist
 
 ### neo4j database
 neo4j-medismart/
-**/*key.yml
-**/*env.yml
+**/*dev.yml
+**/*server.yml

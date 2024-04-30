@@ -25,13 +25,20 @@ export default {
     return {
       // user devise
       isMobile: false,
-      // drawer width
+      // drawer
       mainWidth: '0',
+      isSiderOpen: false,
       // conversation data
       conversationId: -1,
+      // input box
+      inputText: '',
       sendMessage: {},
-      // is ai generating message
-      isLoading: false,
+      loadingContent: true,
+    }
+  },
+  computed: {
+    inputDisabled() {
+      return this.conversationId === -1 || this.loadingContent;
     }
   },
   methods: {
@@ -45,17 +52,24 @@ export default {
       }
     },
     handleSelect(item) {
+      if (this.isMobile) {
+        this.isSiderOpen = false;
+      }
       this.conversationId = item.conversationId;
+      this.loadingContent = true;
     },
-    handleSend(message) {
-      this.sendMessage = buildMessage('user', message);
+    handleSend() {
+      this.loadingContent = true;
+      this.sendMessage = buildMessage('user', this.inputText);
       this.clearMessage();
-      chat(this.conversationId, message).then(res => {
+      chat(this.conversationId, this.inputText).then(res => {
         this.sendMessage = buildMessage('ai', res.data.output);
         this.clearMessage();
+        this.loadingContent = false;
       });
     },
     clearMessage() {
+      this.inputText = '';
       setTimeout(() => {
         this.sendMessage = {};
       }, 500);
@@ -63,31 +77,93 @@ export default {
     handleDownload() {
 
     },
-  }
+    checkWindowWidth() {
+      this.isMobile = window.innerWidth < 650; // 你可以根据需要调整这个值
+    },
+  },
+  mounted() {
+    this.checkWindowWidth();
+    window.addEventListener('resize', this.checkWindowWidth);
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.checkWindowWidth);
+  },
 }
-
-
 </script>
 
 <template>
   <div class="room-box">
     <Sider class="room-box-sider"
+           :isMobile="isMobile"
+           :isOpen="isSiderOpen"
            @status="handleSider"
            @select="handleSelect"
     />
     <div class="room-box-main"
-         :style="{paddingLeft: mainWidth}"
+         :style="{paddingLeft: isMobile? '0' : mainWidth}"
     >
       <Content style="height: 70vh; margin-bottom: 1vh"
                :key="conversationId"
                :conversationId="conversationId"
                :append="sendMessage"
+               @loading="(isLoading)=>{loadingContent = isLoading}"
       />
-      <msg-input style="height: 8vh"
-                 @send="handleSend"
-                 @download="handleDownload"
-                 :disabled="conversationId === -1"
-      />
+      <!--      <msg-input style="height: 8vh"-->
+      <!--                 :isMobile="isMobile"-->
+      <!--                 @send="handleSend"-->
+      <!--                 @download="handleDownload"-->
+      <!--                 :disabled="conversationId === -1 || loadingContent"-->
+      <!--      />-->
+      <div :class="'input-box ' + (inputDisabled? 'disable-box': '')"
+           style="height: 8vh"
+      >
+        <transition name="el-fade-in-linear">
+          <el-button icon="el-icon-s-fold"
+                     class="el-button-list"
+                     key="el-button-fold"
+                     @click="isSiderOpen = !isSiderOpen"
+                     v-show="isMobile"
+          >
+          </el-button>
+        </transition>
+        <el-input
+            class="input-text-area"
+            type="textarea"
+            :autosize="{ minRows: 1, maxRows: 2}"
+            placeholder="输入医疗问题"
+            v-model="inputText"
+            resize="none"
+            @keydown.enter.native="handleSend"
+            :disabled="inputDisabled"
+        >
+        </el-input>
+        <div class="input-button-list">
+          <el-tooltip content="下载聊天记录"
+                      placement="top"
+                      effect="light"
+                      key="el-tooltip-download-history"
+          >
+            <el-button icon="el-icon-download"
+                       key="el-button-download-history"
+                       @click="$emit('download', true)"
+                       :disabled="inputDisabled"
+            ></el-button>
+          </el-tooltip>
+          <el-tooltip placement="top"
+                      effect="light"
+                      content="发送"
+                      key="el-tooltip-send-msg"
+          >
+            <el-button type="success"
+                       icon="el-icon-s-promotion"
+                       key="el-button-send-msg"
+                       class="send-button"
+                       @click="handleSend"
+                       :disabled="inputDisabled"
+            ></el-button>
+          </el-tooltip>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -124,5 +200,64 @@ export default {
   flex-grow: 1;
   box-sizing: border-box;
   bottom: 0;
+}
+
+.disable-box {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  opacity: 0.5;
+}
+
+.disable-box:hover {
+  cursor: not-allowed;
+}
+
+.el-button-list {
+  margin-left: 6px;
+  transition: padding-left 0.3s ease;
+}
+
+.input-box {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background-color: var(--blur-bg);
+  height: 73%;
+  width: 100%;
+  border-radius: var(--border-radius-1);
+  border: 1px solid var(--blur-border);
+
+  display: flex;
+  align-items: center;
+}
+
+.input-text-area {
+  padding: 0 10px;
+  background-color: transparent !important;
+}
+
+.input-text-area:focus {
+  border-color: transparent !important; // 设置激活状态下的边框颜色为透明
+}
+
+.input-text-area::-webkit-scrollbar-track {
+  background-color: #f1f1f1 !important;
+}
+
+.send-button {
+  background-color: #29eac4;
+}
+
+.send-button:hover {
+  background-color: #73e6ce !important;
+}
+
+.input-button-list {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 10px;
 }
 </style>

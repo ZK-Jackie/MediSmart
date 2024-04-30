@@ -5,6 +5,10 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    isMobile: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -26,6 +30,8 @@ export default {
 
 <template>
   <div :class="'input-box ' + (disabled? 'disable-box': '')">
+    <el-button icon="el-icon-s-fold" key="el-button-fold">
+    </el-button>
     <el-input
         class="input-text-area"
         type="textarea"

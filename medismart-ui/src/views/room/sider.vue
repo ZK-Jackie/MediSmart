@@ -1,8 +1,9 @@
 <template>
   <div class="sider">
     <div class="aside-control-button"
-         @click="drawVisible = !drawVisible"
          :style="{left: buttonLeft}"
+         @click="drawVisible = !drawVisible"
+         v-show="!isMobile"
     >
       <i :class="drawVisible? 'el-icon-caret-left' : 'el-icon-caret-right'"></i>
     </div>
@@ -12,7 +13,8 @@
               :placement="'left'"
               :width="300"
               :closable="false"
-              :mask="false"
+              :mask="isMobile"
+              :mask-closable="isMobile"
               :get-container="false"
               :drawerStyle="{ borderRadius: '10px'}"
               :wrap-style="{ position: 'absolute' }"
@@ -73,6 +75,16 @@ function convBinarySearch(arr, target) {
 export default {
   name: "Sider",
   components: {HistoryCard},
+  props:{
+    isMobile: {
+      type: Boolean,
+      default: false
+    },
+    isOpen: {
+      type: Boolean,
+      default: true
+    }
+  },
   data() {
     return {
       // drawer status
@@ -102,6 +114,18 @@ export default {
           this.drawWidth = drawerElement.getBoundingClientRect().width.toString();
           this.$emit('status', this.drawVisible);
         });
+      },
+      immediate: true
+    },
+    isMobile: {
+      handler: function () {
+        this.drawVisible = !this.isMobile;
+      },
+      immediate: true
+    },
+    isOpen:{
+      handler: function () {
+        this.drawVisible = this.isOpen;
       },
       immediate: true
     }
@@ -166,9 +190,6 @@ export default {
       // deep copy 获取历史对话列表
       this.conversationInfo = JSON.parse(JSON.stringify(conversationInfo));
     }
-    getChatHistory('你好').then(res => {
-      console.log(res);
-    });
   },
 }
 </script>

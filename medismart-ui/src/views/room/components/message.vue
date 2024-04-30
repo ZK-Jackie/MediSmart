@@ -1,5 +1,5 @@
 <script>
-import {UUID} from "@/utils/string";
+import MarkdownIt from "markdown-it";
 
 export default {
   props: {
@@ -19,7 +19,7 @@ export default {
       type: Boolean,
       default: false
     },
-    animation:{
+    animation: {
       type: Boolean,
       default: false
     }
@@ -34,7 +34,7 @@ export default {
     text() {
       this.showCursor = false;
       this.currentText = '';
-      if(this.animation){
+      if (this.animation) {
         this.typingEffect();
       }
     }
@@ -51,6 +51,10 @@ export default {
           this.showCursor = false;
         }
       }, 40); // 每50毫秒添加一个字符
+    },
+    toMarkdown(text) {
+      const md = new MarkdownIt();
+      return md.render(text);
     }
   },
   mounted() {
@@ -61,8 +65,9 @@ export default {
       this.typingEffect();
     } else if (this.text !== '' && !this.animation) {
       // 如果当前是历史消息，就不需要动画效果
-      this.showCursor = false;
-      this.currentText = this.text;
+      this.showCursor = true;
+      this.typingEffect();
+      // this.currentText = this.text;
     }
   },
   updated() {
@@ -74,8 +79,7 @@ export default {
 <template>
   <div :class="'my-message-box message-box' + (animation? ' slide-fade-in': '')"
        v-if="!inversion">
-    <div class="content frame">
-      {{ text }}
+    <div class="content frame" v-html="toMarkdown(text)">
     </div>
     <div class="avatar">
       <img src="@/assets/images/user.png" alt="用户头像"/>
@@ -87,10 +91,8 @@ export default {
       <img src="@/assets/images/bot.png" alt="AI头像"/>
     </div>
     <div class="content frame loading">
-      <div>
-        {{ currentText }}
-        <div class="cursor" v-show="showCursor"> </div>
-      </div>
+      <div v-html="toMarkdown(currentText)"></div>
+      <div class="cursor" v-show="showCursor"></div>
     </div>
   </div>
 </template>
@@ -119,15 +121,6 @@ export default {
   }
 }
 
-.cursor {
-  display: inline-block;
-  vertical-align: text-bottom;
-  width: 2px;
-  height: 1rem;
-  background-color: white;
-  animation: blink 1s infinite;
-}
-
 .message-box {
   box-sizing: border-box;
   width: 100%;
@@ -139,6 +132,7 @@ export default {
   padding-bottom: 0;
   color: #000;
 }
+
 .slide-fade-in {
   animation: slide-fade-in 0.5s ease-out;
 }
@@ -147,6 +141,7 @@ export default {
   display: inline-flex !important;
   flex-wrap: nowrap;
   justify-content: flex-end;
+
   .avatar {
     max-width: 48px;
     max-height: 48px;
@@ -154,6 +149,7 @@ export default {
     width: 80px;
     position: relative;
     display: block;
+
     img {
       position: relative;
       width: 100%;
@@ -163,6 +159,7 @@ export default {
       outline: 1px solid var(--blur-border);
     }
   }
+
   .content {
     position: relative;
     display: flex;
@@ -230,6 +227,8 @@ export default {
     color: #000;
 
     p, li, code {
+      margin: 0 !important;
+      padding: 0 !important;
       position: relative;
       font-size: 15px;
       line-height: 1.3;
@@ -237,4 +236,22 @@ export default {
   }
 }
 
+.cursor {
+  position: absolute;
+  right: 0;
+  display: inline-block;
+  vertical-align: text-bottom;
+  width: 2px;
+  height: 1rem;
+  background-color: white;
+  animation: blink 1s infinite;
+}
+
+p, li, code {
+  margin: 0 !important;
+  padding: 0 !important;
+  position: relative;
+  font-size: 15px;
+  line-height: 1.3;
+}
 </style>

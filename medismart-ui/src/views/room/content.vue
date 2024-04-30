@@ -18,12 +18,14 @@ export default {
   components: { Message },
   data() {
     return {
-      // 1. 展示信息
+      // 展示的信息
       messages: [],
-      // 2. 是否显示使用说明
+      // 是否显示使用说明
       showGuide: true,
-      // 3. 消息进入时是否要有动画
-      animation: false
+      // 消息进入时是否要有动画
+      animation: false,
+      // 是否显示加载遮罩
+      loadingContent: true
     }
   },
   watch:{
@@ -42,13 +44,15 @@ export default {
     getChatHistory(this.conversationId).then(res => {
       this.messages = res.data;
       this.messages.reverse();
+      this.loadingContent = false;
+      this.$emit('loading', false)
     })
   }
 }
 </script>
 
 <template>
-  <div class="content-box box">
+  <div class="content-box box" v-loading="loadingContent">
 <!--    <div v-if="conversationId === -1">-->
 <!--      项目LOGO-->
 <!--    </div>-->
