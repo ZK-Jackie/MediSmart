@@ -1,21 +1,25 @@
 <script>
 import Message from "@/views/room/components/message.vue";
-import { getChatHistory } from "@/api/chat";
+import {getChatHistory} from "@/api/chat";
 
 export default {
-  props:{
+  props: {
     conversationId: {
       type: Number,
       default: -1
     },
-    append:{
+    append: {
       type: Object,
       default: () => {
         return {}
       }
+    },
+    waiting: {
+      type: Boolean,
+      default: false
     }
   },
-  components: { Message },
+  components: {Message},
   data() {
     return {
       // 展示的信息
@@ -28,43 +32,54 @@ export default {
       loadingContent: true
     }
   },
-  watch:{
-    append:{
-      handler: function (){
-        if(typeof this.append?.data?.content !== 'undefined'){
+  watch: {
+    append: {
+      handler: function () {
+        if (typeof this.append?.data?.content !== 'undefined') {
           this.messages.push(this.append);
-          console.log(this.messages)
           this.animation = true;
         }
       },
       deep: true
     }
   },
-  mounted(){
-    getChatHistory(this.conversationId).then(res => {
-      this.messages = res.data;
-      this.messages.reverse();
+  mounted() {
+    if (this.conversationId !== -1) {
+      getChatHistory(this.conversationId).then(res => {
+        this.messages = res.data;
+        this.messages.reverse();
+        this.loadingContent = false;
+        this.$emit('loading', false);
+      })
+    } else {
       this.loadingContent = false;
-      this.$emit('loading', false)
-    })
+      this.$emit('loading', false);
+    }
   }
 }
 </script>
 
 <template>
   <div class="content-box box" v-loading="loadingContent">
-<!--    <div v-if="conversationId === -1">-->
-<!--      项目LOGO-->
-<!--    </div>-->
-<!--    <div v-else-if="messages.length === 0 && showGuide">-->
-<!--      使用说明 {{conversationId}}-->
-<!--    </div>-->
+    <!--    <div v-if="conversationId === -1">-->
+    <!--      项目LOGO-->
+    <!--    </div>-->
+    <!--    <div v-else-if="messages.length === 0 && showGuide">-->
+    <!--      使用说明 {{conversationId}}-->
+    <!--    </div>-->
     <Message v-for="(item, index) of messages"
              :key="'' + conversationId + index"
              :text="item.data.content"
              :inversion="item.type === 'ai'"
              :animation="animation"
     />
+    <Message v-show="waiting && !loadingContent"
+             key="wating"
+             text=" "
+             :waiting="waiting"
+             :inversion="true"
+             :animation="true">
+    </Message>
   </div>
 </template>
 

@@ -55,7 +55,6 @@ const user = {
       try{
         return new Promise((resolve, reject) => {
           getInfo().then(res => {
-            console.log(res)
             const user = res.data
             const avatar = (user.avatar == "" || user.avatar == null) ? require("@/assets/images/user.png") : process.env.VUE_APP_BASE_API + user.avatar;
             if (res.roles && res.roles.length > 0) { // 验证返回的roles是否是一个非空数组

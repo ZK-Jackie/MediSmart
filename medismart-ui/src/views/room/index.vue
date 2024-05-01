@@ -1,6 +1,5 @@
 <script>
 import Content from "@/views/room/content.vue";
-import MsgInput from "@/views/room/msgInput.vue";
 import Sider from "@/views/room/sider.vue";
 
 import {chat} from "@/api/chat";
@@ -9,7 +8,7 @@ function buildMessage(type, content) {
   return {
     data: {
       type: type,
-      content: content,
+      content: content.trim(),
     },
     type: type,
   }
@@ -17,7 +16,6 @@ function buildMessage(type, content) {
 
 export default {
   components: {
-    MsgInput,
     Sider,
     Content,
   },
@@ -27,7 +25,7 @@ export default {
       isMobile: false,
       // drawer
       mainWidth: '0',
-      isSiderOpen: false,
+      isSiderOpen: true,
       // conversation data
       conversationId: -1,
       // input box
@@ -41,7 +39,19 @@ export default {
       return this.conversationId === -1 || this.loadingContent;
     }
   },
+  watch: {
+    loadingContent() {
+      this.contentToBottom();
+      document.getElementsByClassName('input-text-area')[0].focus();
+    }
+  },
   methods: {
+    contentToBottom() {
+      this.$nextTick(() => {
+        let contentBoxDOM = document.getElementsByClassName('main-content-box')[0];
+        contentBoxDOM.scrollTop = contentBoxDOM.scrollHeight;
+      });
+    },
     handleSider(isSiderOpen) {
       if (isSiderOpen) {
         let drawerDOM = document.getElementsByClassName('ant-drawer-content-wrapper')[0];
@@ -52,26 +62,61 @@ export default {
       }
     },
     handleSelect(item) {
+      // 移动端直接关闭
       if (this.isMobile) {
         this.isSiderOpen = false;
       }
+      // 1. 检查是否重复点击
+      if (this.conversationId === item.conversationId) {
+        return;
+      }
+      // 2. 切换会话
       this.conversationId = item.conversationId;
       this.loadingContent = true;
     },
+    handleEnter(event) {
+      if(this.loadingContent){
+        this.$message.warning('请等待AI回复');
+        return;
+      }
+      if(this.inputDisabled && this.conversationId === -1){
+        this.$message.warning('请先选择一个会话');
+        return;
+      }else if(this.inputDisabled){
+        this.$message.warning('请等待AI回复');
+        return;
+      }
+      if (event.ctrlKey && event.keyCode === 13) {
+        event.preventDefault()
+        this.inputText += "\n";
+        this.$nextTick(() => {
+          event.target.scrollTop = event.target.scrollHeight;
+          this.contentToBottom();
+        });
+      } else if (event.keyCode === 13) {
+        event.preventDefault()
+        this.handleSend();
+      }
+    },
     handleSend() {
+      if (this.inputText === '') {
+        return;
+      }
       this.loadingContent = true;
       this.sendMessage = buildMessage('user', this.inputText);
+      this.contentToBottom();
       this.clearMessage();
       chat(this.conversationId, this.inputText).then(res => {
         this.sendMessage = buildMessage('ai', res.data.output);
         this.clearMessage();
         this.loadingContent = false;
+        this.contentToBottom();
       });
     },
     clearMessage() {
-      this.inputText = '';
       setTimeout(() => {
         this.sendMessage = {};
+        this.inputText = '';
       }, 500);
     },
     handleDownload() {
@@ -79,6 +124,9 @@ export default {
     },
     checkWindowWidth() {
       this.isMobile = window.innerWidth < 650; // 你可以根据需要调整这个值
+      if (this.isMobile) {
+        this.isSiderOpen = false;
+      }
     },
   },
   mounted() {
@@ -103,17 +151,13 @@ export default {
          :style="{paddingLeft: isMobile? '0' : mainWidth}"
     >
       <Content style="height: 70vh; margin-bottom: 1vh"
+               class="main-content-box"
                :key="conversationId"
                :conversationId="conversationId"
                :append="sendMessage"
+               :waiting="inputDisabled && conversationId !== -1"
                @loading="(isLoading)=>{loadingContent = isLoading}"
-      />
-      <!--      <msg-input style="height: 8vh"-->
-      <!--                 :isMobile="isMobile"-->
-      <!--                 @send="handleSend"-->
-      <!--                 @download="handleDownload"-->
-      <!--                 :disabled="conversationId === -1 || loadingContent"-->
-      <!--      />-->
+      ></Content>
       <div :class="'input-box ' + (inputDisabled? 'disable-box': '')"
            style="height: 8vh"
       >
@@ -133,8 +177,7 @@ export default {
             placeholder="输入医疗问题"
             v-model="inputText"
             resize="none"
-            @keydown.enter.native="handleSend"
-            :disabled="inputDisabled"
+            @keydown.enter.native="handleEnter"
         >
         </el-input>
         <div class="input-button-list">

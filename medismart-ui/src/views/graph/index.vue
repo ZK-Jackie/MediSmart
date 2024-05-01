@@ -85,12 +85,12 @@ export default {
   <div class="graph">
     <searchBox class="search-box" @alert="handleSearch"></searchBox>
     <div class="graph-viewer">
-      <div class="aside-control-button"
-           @click="drawVisible = !drawVisible"
-           :style="{left: buttonLeft}"
-      >
-        <i :class="drawVisible? 'el-icon-caret-left' : 'el-icon-caret-right'"></i>
-      </div>
+<!--      <div class="aside-control-button"-->
+<!--           @click="drawVisible = !drawVisible"-->
+<!--           :style="{left: buttonLeft}"-->
+<!--      >-->
+<!--        <i :class="drawVisible? 'el-icon-caret-left' : 'el-icon-caret-right'"></i>-->
+<!--      </div>-->
       <el-drawer
           ref="drawer"
           :visible.sync="drawVisible"

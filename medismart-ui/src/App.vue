@@ -17,6 +17,10 @@
   margin: 0% 2%;
 }
 
+p {
+  margin: 0;
+}
+
 #router-box {
   position: relative;
   top: calc(70px + 2vh);

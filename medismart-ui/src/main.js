@@ -8,7 +8,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 // Echarts
 import * as echarts from 'echarts';
 // Ant Design Vue
-import Antd from 'ant-design-vue';
+import {Button,Card,Drawer,Icon,Popconfirm} from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
 
 import './assets/style.scss' // global css
@@ -22,7 +22,11 @@ Vue.prototype.$echarts = echarts
 
 Vue.use(ElementUI);
 Vue.use(plugins);
-Vue.use(Antd);
+Vue.use(Button);
+Vue.use(Card);
+Vue.use(Drawer);
+Vue.use(Icon);
+Vue.use(Popconfirm);
 
 new Vue({
   el: '#app',

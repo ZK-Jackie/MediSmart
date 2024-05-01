@@ -140,7 +140,6 @@ export default {
       this.isButtonLoading = true;
       this.$refs["loginForm"].validate((valid) => {
         if (valid) {
-          console.log(this.loginFormData);
           this.$store.dispatch("Login", this.loginFormData).then(() => {
             this.$router.push({path: this.redirect || "/"}).catch(() => {
             });

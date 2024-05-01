@@ -22,6 +22,10 @@ export default {
     animation: {
       type: Boolean,
       default: false
+    },
+    waiting: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -42,15 +46,17 @@ export default {
   methods: {
     typingEffect() {
       let index = 0;
-      const intervalId = setInterval(() => {
+      const typeNextCharacter = () => {
         if (index < this.text.length) {
           this.currentText += this.text[index];
           index++;
+          const lag = 40 + Math.floor(Math.random() * 100);
+          setTimeout(typeNextCharacter, lag);
         } else {
-          clearInterval(intervalId);
           this.showCursor = false;
         }
-      }, 40); // 每50毫秒添加一个字符
+      };
+      typeNextCharacter();
     },
     toMarkdown(text) {
       const md = new MarkdownIt();
@@ -61,13 +67,11 @@ export default {
     this.currentText = '';
     if (this.text !== '' && this.animation) {
       // 如果当前是正在聊天的状态，就会有文字，就需要动画效果
-      this.showCursor = true;
       this.typingEffect();
     } else if (this.text !== '' && !this.animation) {
       // 如果当前是历史消息，就不需要动画效果
-      this.showCursor = true;
-      this.typingEffect();
-      // this.currentText = this.text;
+      // this.typingEffect();
+      this.currentText = this.text;
     }
   },
   updated() {
@@ -79,8 +83,7 @@ export default {
 <template>
   <div :class="'my-message-box message-box' + (animation? ' slide-fade-in': '')"
        v-if="!inversion">
-    <div class="content frame" v-html="toMarkdown(text)">
-    </div>
+    <div class="message-content frame" v-html="toMarkdown(text)"></div>
     <div class="avatar">
       <img src="@/assets/images/user.png" alt="用户头像"/>
     </div>
@@ -90,9 +93,13 @@ export default {
     <div class="avatar">
       <img src="@/assets/images/bot.png" alt="AI头像"/>
     </div>
-    <div class="content frame loading">
-      <div v-html="toMarkdown(currentText)"></div>
-      <div class="cursor" v-show="showCursor"></div>
+    <div class="message-content frame loading">
+      <div class="content-markdown"
+           v-html="toMarkdown(currentText)"
+           :style="showCursor? 'margin-right: 1rem': ''"
+      ></div>
+      <div class="cursor" v-show="showCursor||waiting">
+      </div>
     </div>
   </div>
 </template>
@@ -160,12 +167,12 @@ export default {
     }
   }
 
-  .content {
+  .message-content {
     position: relative;
     display: flex;
     flex-direction: column;
     gap: 18px;
-    min-width: 0;
+    min-width: 2rem;
     color: #000;
   }
 
@@ -206,6 +213,7 @@ export default {
     border-radius: 10px;
     border: 1px solid #000;
     padding: 10px;
+    min-width: 2rem;
     /* position: absolute; */
     background-color: #9cc;
   }
@@ -217,41 +225,33 @@ export default {
     justify-content: flex-end;
   }
 
-  .content {
+  .message-content {
     text-align: left;
+    align-items: center;
     position: relative;
     display: flex;
     flex-direction: column;
     gap: 18px;
-    min-width: 0;
+    min-width: 2rem;
     color: #000;
-
-    p, li, code {
-      margin: 0 !important;
-      padding: 0 !important;
-      position: relative;
-      font-size: 15px;
-      line-height: 1.3;
-    }
   }
 }
 
+.text-and-cursor {
+  display: flex;
+  align-items: center;
+}
+
 .cursor {
+  color: transparent;
+  margin: 0 1rem;
   position: absolute;
   right: 0;
   display: inline-block;
   vertical-align: text-bottom;
-  width: 2px;
+  width: 0.5rem;
   height: 1rem;
   background-color: white;
-  animation: blink 1s infinite;
-}
-
-p, li, code {
-  margin: 0 !important;
-  padding: 0 !important;
-  position: relative;
-  font-size: 15px;
-  line-height: 1.3;
+  animation: blink 0.8s infinite;
 }
 </style>
