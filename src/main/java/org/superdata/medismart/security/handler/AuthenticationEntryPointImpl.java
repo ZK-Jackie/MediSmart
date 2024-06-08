@@ -2,7 +2,7 @@ package org.superdata.medismart.security.handler;
 
 import com.alibaba.fastjson.JSON;
 import org.superdata.medismart.common.ResponseResult;
-import org.superdata.medismart.utils.WebUtil;
+import org.superdata.medismart.utils.WebUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -19,7 +19,7 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         ResponseResult result = new ResponseResult(HttpStatus.UNAUTHORIZED.value(), "认证失败请重新登录");
         String json = JSON.toJSONString(result);
-        WebUtil.renderString(response,json);
+        WebUtils.renderString(response,json);
     }
 }
 

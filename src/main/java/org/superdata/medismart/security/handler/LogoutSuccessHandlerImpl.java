@@ -2,11 +2,10 @@ package org.superdata.medismart.security.handler;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.superdata.medismart.entity.SysUser;
-import org.superdata.medismart.mapper.SysUserMapper;
 import org.superdata.medismart.service.SysUserService;
-import org.superdata.medismart.utils.JwtUtil;
-import org.superdata.medismart.utils.RedisCache;
-import org.superdata.medismart.utils.WebUtil;
+import org.superdata.medismart.utils.security.JwtUtil;
+import org.superdata.medismart.utils.database.RedisCache;
+import org.superdata.medismart.utils.WebUtils;
 import io.jsonwebtoken.Claims;
 
 import org.springframework.security.core.Authentication;
@@ -52,6 +51,6 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
         // 删除用户缓存记录
         redisCache.deleteObject("login:" + userid);
 
-        WebUtil.renderString(response, "退出成功");
+        WebUtils.renderString(response, "退出成功");
     }
 }

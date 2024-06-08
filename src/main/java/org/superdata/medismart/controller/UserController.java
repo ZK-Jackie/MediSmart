@@ -2,12 +2,11 @@ package org.superdata.medismart.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.superdata.medismart.common.ResponseResult;
-import org.superdata.medismart.constant.CacheConstants;
+import org.superdata.medismart.common.constant.CacheConstants;
 import org.superdata.medismart.entity.SysUser;
 import org.superdata.medismart.entity.request.UserLoginRequest;
 import org.superdata.medismart.security.service.LoginService;
-import org.superdata.medismart.utils.RedisCache;
-import org.springframework.util.StringUtils;
+import org.superdata.medismart.utils.database.RedisCache;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,6 +36,21 @@ public class UserController {
         sysUser.setUserName(user.getUsername());
         sysUser.setPassword(user.getPassword());
         return loginService.login(sysUser);
+    }
+
+    @PostMapping("/register")
+    public ResponseResult register(@RequestBody UserLoginRequest user){
+        if (user == null){
+            return new ResponseResult(401, "参数不能为空");
+        }
+        // 验证码校验
+        validateCaptcha(user.getUsername(), user.getCode(), user.getUuid());
+        // 注册前校验
+        loginPreCheck(user.getUsername(), user.getPassword());
+        SysUser sysUser = new SysUser();
+        sysUser.setUserName(user.getUsername());
+        sysUser.setPassword(user.getPassword());
+        return loginService.register(sysUser);
     }
 
 

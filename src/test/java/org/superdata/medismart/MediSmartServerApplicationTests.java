@@ -4,7 +4,7 @@ import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.CircleCaptcha;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.lang.UUID;
-import org.superdata.medismart.utils.RedisCache;
+import org.superdata.medismart.utils.database.RedisCache;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

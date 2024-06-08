@@ -1,11 +1,14 @@
 package org.superdata.medismart.security.service;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.superdata.medismart.common.ResponseResult;
-import org.superdata.medismart.constant.CacheConstants;
+import org.superdata.medismart.common.constant.CacheConstants;
 import org.superdata.medismart.entity.SysUser;
+import org.superdata.medismart.mapper.sql.SysUserMapper;
 import org.superdata.medismart.security.domain.LoginUser;
-import org.superdata.medismart.utils.JwtUtil;
-import org.superdata.medismart.utils.RedisCache;
+import org.superdata.medismart.service.SysUserService;
+import org.superdata.medismart.utils.security.JwtUtil;
+import org.superdata.medismart.utils.database.RedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,6 +27,10 @@ public class LoginServiceImpl implements LoginService {
     private AuthenticationManager authenticationManager;
     @Resource
     private RedisCache redisCache;
+    @Autowired
+    private SysUserMapper sysUserMapper;
+    @Resource
+    private SysUserService sysUserService;
 
     @Override
     public ResponseResult login(SysUser user) {
@@ -51,5 +58,15 @@ public class LoginServiceImpl implements LoginService {
         Long userid = loginUser.getUser().getId();
         redisCache.deleteObject(CacheConstants.USER_LOGIN_KEY+userid);
         return new ResponseResult(200,"退出成功");
+    }
+
+    @Override
+    public ResponseResult register(SysUser sysUser) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String rawPassword = "123456";
+        String encodedPassword = passwordEncoder.encode(rawPassword);
+        sysUser.setPassword(encodedPassword);
+        sysUserMapper.insertUser(sysUser);
+        return null;
     }
 }

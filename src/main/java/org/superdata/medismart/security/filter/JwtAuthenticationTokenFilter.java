@@ -1,8 +1,8 @@
 package org.superdata.medismart.security.filter;
 
 import org.superdata.medismart.security.domain.LoginUser;
-import org.superdata.medismart.utils.JwtUtil;
-import org.superdata.medismart.utils.RedisCache;
+import org.superdata.medismart.utils.security.JwtUtil;
+import org.superdata.medismart.utils.database.RedisCache;
 import io.jsonwebtoken.Claims;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;

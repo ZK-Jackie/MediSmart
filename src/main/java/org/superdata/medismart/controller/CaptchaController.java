@@ -5,24 +5,22 @@ import cn.hutool.captcha.CircleCaptcha;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.lang.UUID;
 import org.superdata.medismart.common.ResponseResult;
-import org.superdata.medismart.constant.CacheConstants;
-import org.superdata.medismart.utils.RedisCache;
+import org.superdata.medismart.common.constant.CacheConstants;
+import org.superdata.medismart.utils.database.RedisCache;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.FastByteArrayOutputStream;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
-import org.superdata.medismart.constant.Constants;
+import org.superdata.medismart.common.constant.Constants;
 
 @Slf4j
 @RestController

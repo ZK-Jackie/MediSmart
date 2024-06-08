@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @Slf4j
 @SpringBootApplication(scanBasePackages = "org.superdata.medismart")
-@MapperScan("org.superdata.medismart.mapper")
+@MapperScan("org.superdata.medismart.mapper.sql")
 public class MediSmartServerApplication {
 
     public static void main(String[] args) {

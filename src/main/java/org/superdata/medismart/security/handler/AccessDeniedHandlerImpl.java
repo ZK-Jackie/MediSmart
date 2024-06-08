@@ -2,7 +2,7 @@ package org.superdata.medismart.security.handler;
 
 import com.alibaba.fastjson.JSON;
 import org.superdata.medismart.common.ResponseResult;
-import org.superdata.medismart.utils.WebUtil;
+import org.superdata.medismart.utils.WebUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -21,7 +21,7 @@ public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
         ResponseResult result = new ResponseResult(HttpStatus.FORBIDDEN.value(), "权限不足");
         String json = JSON.toJSONString(result);
-        WebUtil.renderString(response,json);
+        WebUtils.renderString(response,json);
 
     }
 }

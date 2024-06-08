@@ -7,7 +7,7 @@ import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.superdata.medismart.constant.Constants;
+import org.superdata.medismart.common.constant.Constants;
 
 @Configuration
 public class RabbitMQConfig {

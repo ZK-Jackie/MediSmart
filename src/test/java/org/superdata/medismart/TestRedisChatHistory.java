@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.superdata.medismart.utils.RedisCache;
+import org.superdata.medismart.utils.database.RedisCache;
 
 import javax.annotation.Resource;
 import java.util.Collection;

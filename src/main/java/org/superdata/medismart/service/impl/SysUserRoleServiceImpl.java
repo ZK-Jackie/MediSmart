@@ -3,7 +3,7 @@ package org.superdata.medismart.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.superdata.medismart.entity.SysUserRole;
 import org.superdata.medismart.service.SysUserRoleService;
-import org.superdata.medismart.mapper.SysUserRoleMapper;
+import org.superdata.medismart.mapper.sql.SysUserRoleMapper;
 import org.springframework.stereotype.Service;
 
 /**

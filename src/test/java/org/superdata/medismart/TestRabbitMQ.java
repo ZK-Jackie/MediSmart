@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.superdata.medismart.constant.Constants;
+import org.superdata.medismart.common.constant.Constants;
 import org.superdata.medismart.entity.request.UserChatRequest;
 
 import javax.annotation.Resource;

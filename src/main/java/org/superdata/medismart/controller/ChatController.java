@@ -10,12 +10,11 @@ import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.superdata.medismart.common.ResponseResult;
-import org.superdata.medismart.constant.CacheConstants;
-import org.superdata.medismart.constant.Constants;
+import org.superdata.medismart.common.constant.CacheConstants;
+import org.superdata.medismart.common.constant.Constants;
 import org.superdata.medismart.entity.request.UserChatRequest;
-import org.superdata.medismart.service.MessageService;
-import org.superdata.medismart.utils.JwtUtil;
-import org.superdata.medismart.utils.RedisCache;
+import org.superdata.medismart.utils.security.JwtUtil;
+import org.superdata.medismart.utils.database.RedisCache;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;

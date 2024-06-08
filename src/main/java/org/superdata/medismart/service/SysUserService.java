@@ -10,4 +10,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface SysUserService extends IService<SysUser> {
 
+    String selectUserRoleGroup(Long id);
+
+    Boolean resetUserPwd(String userName, String newPassword);
+
+    Boolean updateUserAvatar(String username, String avatar);
 }

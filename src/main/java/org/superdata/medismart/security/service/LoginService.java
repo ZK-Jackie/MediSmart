@@ -8,4 +8,6 @@ public interface LoginService {
     ResponseResult login(SysUser user);
 
     ResponseResult logout();
+
+    ResponseResult register(SysUser sysUser);
 }
