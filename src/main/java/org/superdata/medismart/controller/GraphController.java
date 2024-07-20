@@ -4,11 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.superdata.medismart.common.ResponseResult;
-import org.superdata.medismart.entity.GraphNode;
 import org.superdata.medismart.entity.request.GraphNodeReq;
 import org.superdata.medismart.service.GraphService;
 import org.superdata.medismart.utils.StringUtils;
-import org.superdata.medismart.utils.neo4j.GraphNodeFactory;
 
 import javax.annotation.Resource;
 
@@ -52,8 +50,7 @@ public class GraphController {
         // 格式化nodeType为首字母大写的字符串
         req.setNodeType(StringUtils.capitalizeFirstLetter(StringUtils.uncapitalize(req.getNodeType())));
         // 根据nodeType，将nodeInfo转为GraphNode的子类实例
-        GraphNode node = (GraphNode) GraphNodeFactory.me().getGraphNode(req.getNodeType(), req.getNodeInfo());
-        return ResponseResult.success(graphService.addNodeByFile(node));
+        return ResponseResult.success(graphService.saveNode(req.getNodeInfo(), req.getNodeType()));
     }
 
     @PutMapping("/kg/update")
@@ -61,9 +58,7 @@ public class GraphController {
         log.info("用户更新结点 “{}”", req);
         // 格式化nodeType为首字母大写的字符串
         req.setNodeType(StringUtils.capitalizeFirstLetter(StringUtils.uncapitalize(req.getNodeType())));
-        // 根据nodeType，将nodeInfo转为GraphNode的子类实例
-        GraphNode node = (GraphNode) GraphNodeFactory.me().getGraphNode(req.getNodeType(), req.getNodeInfo());
-        return ResponseResult.success(graphService.updateNode(node));
+        return ResponseResult.success(graphService.saveNode(req.getNodeInfo(), req.getNodeType()));
     }
 
     @DeleteMapping("/kg/delete/{id}")

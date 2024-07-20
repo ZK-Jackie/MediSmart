@@ -1,19 +1,12 @@
 package org.superdata.medismart.entity.node;
 
-import lombok.Getter;
+import lombok.*;
+import org.apache.ibatis.annotations.Mapper;
 import org.superdata.medismart.entity.GraphNode;
 
-@Getter
+@EqualsAndHashCode(callSuper = true)
+@Data
+@AllArgsConstructor
 public class Food extends GraphNode {
-    public Food(Long id, String name) {
-        super(id, name, "Food");
-    }
 
-    public Food(String name) {
-        super(name, "Food");
-    }
-
-    public Food() {
-        super(null, "Food");
-    }
 }

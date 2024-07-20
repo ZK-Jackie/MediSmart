@@ -1,16 +1,15 @@
 package org.superdata.medismart.entity.node;
 
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.neo4j.core.schema.Property;
 import org.superdata.medismart.entity.GraphNode;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)    // 考虑当前类的值的同时，检查从父类继承而来的值
 public class Disease extends GraphNode {
     @Property("cause")
@@ -36,16 +35,4 @@ public class Disease extends GraphNode {
 
     @Property("prevent")
     public String prevent;
-
-    public Disease(Long id, String name) {
-        super(id, name, "Disease");
-    }
-
-    public Disease(String name) {
-        super(name, "Disease");
-    }
-
-    public Disease() {
-        super(null, "Disease");
-    }
 }

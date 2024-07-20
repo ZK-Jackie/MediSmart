@@ -1,7 +1,7 @@
 <template>
   <div class="navigator">
     <a class="nav-brand" @click="$router.push('/')" style="margin-left: 2vh">
-      医智通 MadiSmart
+      医智通 MediSmart
     </a>
     <div class="nav-menu">
       <el-menu mode="horizontal" class="menu" :default-active="activeIndex">

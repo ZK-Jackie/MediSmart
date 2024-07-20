@@ -4,6 +4,7 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class ObjectUtils {
@@ -70,5 +71,29 @@ public class ObjectUtils {
     public static Object cast(String className, Object obj) throws Exception {
         Class<?> clazz = Class.forName(className);
         return clazz.cast(obj);
+    }
+
+    /**
+     * 将 LinkedHashMap 转换为对象
+     * @param map LinkedHashMap 对象
+     * @param className 类名，应提供全路径，如：org.superdata.medismart.entity.ChatMessage
+     * @return Object 返回转换后的对象
+     * @throws Exception 异常
+     */
+    public static Object mapToObject(LinkedHashMap<String, Object> map, String className) throws Exception {
+        // 创建新对象
+        Object object = createObject(className);
+
+        // 遍历 map 的每一个条目
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            // 尝试设置对象的属性
+            try {
+                setProperty(object, entry.getKey(), entry.getValue());
+            } catch (Exception e) {
+                // 如果属性不存在或者类型不匹配，忽略错误
+            }
+        }
+
+        return object;
     }
 }

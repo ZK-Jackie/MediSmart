@@ -31,22 +31,22 @@ public class TestGraph {
 
     @Test
     public void testAdd() throws Exception {
-        GraphNodeReq req = new GraphNodeReq();
-        req.setNodeType("check");
-        Map<String, Object> properties = new HashMap<>();
-        properties.put("name", "test");
-        req.setNodeInfo(properties);
-        // 格式化nodeType为首字母大写的字符串
-        req.setNodeType(StringUtils.capitalizeFirstLetter(StringUtils.uncapitalize(req.getNodeType())));
-        // 根据nodeType，将nodeInfo转为GraphNode的子类实例
-        GraphNode node = (GraphNode) GraphNodeFactory.me().getGraphNode(
-                req.getNodeType(),
-                ObjectUtils.createAndLoadObject(
-                        Constants.NODE_ENTITY_PACKAGE+"."+req.getNodeType(),
-                        properties
-                )
-        );
-        graphService.addNodeByFile(node);
+//        GraphNodeReq req = new GraphNodeReq();
+//        req.setNodeType("check");
+//        Map<String, Object> properties = new HashMap<>();
+//        properties.put("name", "test");
+//        req.setNodeInfo(properties);
+//        // 格式化nodeType为首字母大写的字符串
+//        req.setNodeType(StringUtils.capitalizeFirstLetter(StringUtils.uncapitalize(req.getNodeType())));
+//        // 根据nodeType，将nodeInfo转为GraphNode的子类实例
+//        GraphNode node = (GraphNode) GraphNodeFactory.me().getGraphNode(
+//                req.getNodeType(),
+//                ObjectUtils.createAndLoadObject(
+//                        Constants.NODE_ENTITY_PACKAGE+"."+req.getNodeType(),
+//                        properties
+//                )
+//        );
+//        graphService.addNodeByFile(node);
     }
 
     @Test

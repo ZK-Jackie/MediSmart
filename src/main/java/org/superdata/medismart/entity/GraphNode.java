@@ -1,5 +1,6 @@
 package org.superdata.medismart.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,23 +11,19 @@ import org.springframework.data.neo4j.core.schema.Property;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class GraphNode {
     @Id
     @GeneratedValue
     public Long id;
 
+    @Property("uid")
+    public String uid;
+
     @Property("name")
     public String name;
 
-    public final String category;
+    @Property("category")
+    public String category;
 
-    protected GraphNode(String name, String category) {
-        this.id = null;
-        this.name = name;
-        this.category = category;
-    }
-
-    public void setCategory(String category) {
-        throw new UnsupportedOperationException("Category is final and cannot be changed");
-    }
 }

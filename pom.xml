@@ -41,13 +41,13 @@
             <artifactId>jjwt</artifactId>
             <version>0.9.0</version>
         </dependency>
-        <!-- Spring 开发工具 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
+        <!-- SpringBoot 热部署工具 开发中有可能会出现相同类型对象的转换异常！能力有限，暂无法根除！ -->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-devtools</artifactId>-->
+<!--            <scope>runtime</scope>-->
+<!--            <optional>true</optional>-->
+<!--        </dependency>-->
         <!-- JDBC -->
         <dependency>
             <groupId>com.mysql</groupId>
@@ -96,7 +96,7 @@
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>3.5.3.1</version>
         </dependency>
-        <!-- Hutool -->
+        <!-- Captcha -->
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>

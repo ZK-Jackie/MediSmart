@@ -4,15 +4,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.superdata.medismart.entity.GraphNode;
+import org.superdata.medismart.entity.node.*;
+import org.superdata.medismart.mapper.neo4j.*;
 import org.superdata.medismart.service.GraphService;
 import org.superdata.medismart.mapper.NodeRepoFactory;
 import org.superdata.medismart.utils.ObjectUtils;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 @Slf4j
 @Service
 public class GraphServiceImpl implements GraphService{
+    @Resource
     private NodeRepoFactory nodeRepoFactory;
 
     /**
@@ -74,17 +78,92 @@ public class GraphServiceImpl implements GraphService{
     }
 
     @Override
-    public Boolean updateNode(GraphNode node) {
+    public Boolean saveNode(GraphNode node) {
         // 1. 获取节点类型
         String label = getLabelFromNode(node);
         // 2. 更新
         NodeRepoFactory.getRepository(label).save(node);
+        if(node.getCategory().equals("Check")){
+            CheckRepository repo = (CheckRepository) NodeRepoFactory.getRepository("Check");
+            repo.save((Check) node);
+        }else {
+            NodeRepoFactory.getRepository(label).save(node);
+        }
         return true;
     }
 
     @Override
     public Boolean deleteNode(Long id) {
         NodeRepoFactory.getRepository().deleteById(id);
+        return true;
+    }
+
+    @Override
+    public Boolean saveNode(Disease node, String nodeType) {
+        switch (nodeType) {
+            case "Check": {
+                CheckRepository repo = (CheckRepository) NodeRepoFactory.getRepository("Check");
+                Check n = new Check();
+                n.setId(node.getId());
+                n.setName(node.getName());
+                n.setCategory(node.getCategory());
+                repo.save(n);
+                break;
+            }
+            case "Department": {
+                DepartmentRepository repo = (DepartmentRepository) NodeRepoFactory.getRepository("Department");
+                Department n = new Department();
+                n.setId(node.getId());
+                n.setName(node.getName());
+                n.setCategory(node.getCategory());
+                repo.save(n);
+                break;
+            }
+            case "Disease": {
+                DiseaseRepository repo = (DiseaseRepository) NodeRepoFactory.getRepository("Disease");
+                repo.save(node);
+                break;
+            }
+            case "Drug": {
+                DrugRepository repo = (DrugRepository) NodeRepoFactory.getRepository("Drug");
+                Drug n = new Drug();
+                n.setId(node.getId());
+                n.setName(node.getName());
+                n.setCategory(node.getCategory());
+                repo.save(n);
+                break;
+            }
+            case "Food": {
+                FoodRepository repo = (FoodRepository) NodeRepoFactory.getRepository("Food");
+                Food n = new Food();
+                n.setId(node.getId());
+                n.setName(node.getName());
+                n.setCategory(node.getCategory());
+                repo.save(n);
+                break;
+            }
+            case "Producer": {
+                ProducerRepository repo = (ProducerRepository) NodeRepoFactory.getRepository("Producer");
+                Producer n = new Producer();
+                n.setId(node.getId());
+                n.setName(node.getName());
+                n.setCategory(node.getCategory());
+                repo.save(n);
+                break;
+            }
+            case "Symptom": {
+                SymptomRepository repo = (SymptomRepository) NodeRepoFactory.getRepository("Symptom");
+                Symptom n = new Symptom();
+                n.setId(node.getId());
+                n.setName(node.getName());
+                n.setCategory(node.getCategory());
+                repo.save(n);
+                break;
+            }
+            default:
+                log.error("未知的节点类型");
+                throw new RuntimeException("未知的节点类型");
+        }
         return true;
     }
 

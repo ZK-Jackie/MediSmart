@@ -17,7 +17,7 @@ const nameMapping = {
 };
 
 export function toEchartsData(centerNode, mapData) {
-  console.log(centerNode)
+  let centerNodeDeepBak = JSON.parse(JSON.stringify(centerNode));
   const links = Object.keys(mapData);
   const nodes = Object.values(mapData);
 
@@ -26,10 +26,10 @@ export function toEchartsData(centerNode, mapData) {
   let retCategories = [];
 
   // 1. fill retNodes arr
-  centerNode.symbolSize = 70;
-  retNodes.push(centerNode);
-  retCategories.push(centerNode.category);
-  centerNode.category = retCategories.indexOf(centerNode.category);
+  centerNodeDeepBak.symbolSize = 70;
+  retNodes.push(centerNodeDeepBak);
+  retCategories.push(centerNodeDeepBak.category);
+  centerNodeDeepBak.category = retCategories.indexOf(centerNodeDeepBak.category);
   for (let i = 0; i < links.length; i++) {
     nodes[i].forEach((node, index) => {
       /** category **/
@@ -45,7 +45,7 @@ export function toEchartsData(centerNode, mapData) {
       /** link **/
       // 梳理 推送
       retLinks.push({
-        source: centerNode.id,
+        source: centerNodeDeepBak.id,
         target: node.id,
         name: links[i]
       })

@@ -122,7 +122,7 @@ export default {
       });
     },
     Signin() {
-      return;
+      // return;
       this.overlaylong = "overlaylongleft"
       this.overlaytitle = "overlaytitleright"
       setTimeout(() => {
@@ -211,7 +211,7 @@ export default {
               <img class="captcha-pic" :src="codeUrl" alt="验证码" @click="getCode"  v-loading="codeUrl === ''"/>
             </el-form-item>
           </el-form>
-          <button class="inupbutton" @click="onRegister()">注册</button>
+          <el-button class="inupbutton" @click="onRegister()" round>注册</el-button>
         </div>
 
       </div>
@@ -220,9 +220,9 @@ export default {
           <h2 class="overlaytitleH2">希望能为您解惑</h2>
           <p class="overlaytitleP">
             请输入您的用户名和密码以登录您的账户。
-<!--            如果您尚未注册，请点击下方按钮创建新账户。-->
+            如果您尚未注册，请点击下方按钮创建新账户。
           </p>
-<!--          <div class="buttongohs" @click="Signin">注册账户</div>-->
+          <div class="buttongohs" @click="Signin">注册账户</div>
         </div>
         <div class="overlaytitle-Signup" v-if="disfiex === 1">
           <h2 class="overlaytitleH2">希望我们能帮到您</h2>

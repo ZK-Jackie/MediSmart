@@ -39,3 +39,18 @@ export function map(id) {
     params: data
   })
 }
+
+// 修改结点信息方法
+export function edit(node) {
+  const req = {
+    operation: 'update',
+    nodeType: node.category,
+    nodeInfo: node
+  }
+  console.log(req);
+  return request({
+    url: '/kg/update',
+    method: 'put',
+    data: req
+  })
+}

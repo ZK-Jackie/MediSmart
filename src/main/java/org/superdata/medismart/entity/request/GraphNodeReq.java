@@ -4,6 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.superdata.medismart.entity.GraphNode;
+import org.superdata.medismart.entity.node.Disease;
+import org.superdata.medismart.entity.node.Drug;
+
+import java.util.HashMap;
 
 @Data
 @NoArgsConstructor
@@ -21,5 +25,5 @@ public class GraphNodeReq{
     /**
      * 节点信息
      * */
-    private Object nodeInfo;
+    private Disease nodeInfo;
 }

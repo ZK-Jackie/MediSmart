@@ -8,5 +8,5 @@ public class Constants {
     public static final String STOCK_EX="rpc_ex";
     public static final String STOCK_ROUT="rpc_rout";
 
-    public static final String NODE_ENTITY_PACKAGE = "org.superdata.medismart.entity.nodeTypes";
+    public static final String NODE_ENTITY_PACKAGE = "org.superdata.medismart.entity.node";
 }

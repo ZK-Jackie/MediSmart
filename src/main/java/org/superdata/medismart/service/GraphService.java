@@ -2,6 +2,7 @@ package org.superdata.medismart.service;
 
 import org.springframework.web.multipart.MultipartFile;
 import org.superdata.medismart.entity.GraphNode;
+import org.superdata.medismart.entity.node.Disease;
 
 import java.util.List;
 import java.util.Map;
@@ -18,7 +19,9 @@ public interface GraphService{
 
     Boolean addNodeByFile(MultipartFile file);
 
-    Boolean updateNode(GraphNode node);
+    Boolean saveNode(GraphNode node);
 
     Boolean deleteNode(Long id);
+
+    Boolean saveNode(Disease node, String nodeType);
 }

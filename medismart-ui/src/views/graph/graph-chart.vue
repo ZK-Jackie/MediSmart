@@ -38,7 +38,7 @@ export default {
       console.log(categoryMap);
       const option = {
         title: {
-          text: '医智通(MediEase)知识库',
+          text: '医智通(MediSmart)知识库',
           subtext: 'Default layout',
           top: 'bottom',
           left: 'right'
