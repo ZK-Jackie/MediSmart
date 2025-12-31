@@ -74,18 +74,18 @@ MediSmart 是一个集成了**知识图谱**、**大语言模型**和**智能问
 - **Java版本**: JDK 1.8
 
 ### 前端技术
-- **框架**: Vue.js 3.x
+- **框架**: Vue.js 2.6
 - **状态管理**: Vuex
 - **路由**: Vue Router
 - **HTTP客户端**: Axios
-- **UI框架**: Element Plus / 自定义组件
+- **UI框架**: Element
 - **图谱可视化**: ECharts
-- **构建工具**: Webpack / Vite
+- **构建工具**: Webpack
 
 ### AI服务
 - **框架**: FastAPI
-- **AI框架**: LangChain 0.3.x
-- **向量存储**: LangChain-Redis
+- **AI框架**: LangChain 0.3.x   LangGraph 0.3.x
+- **聊天记录存储**: LangChain-Redis
 - **图数据库集成**: LangChain-Neo4j
 - **模型**: OpenAI GPT / 兼容API
 - **Python版本**: 3.11
@@ -93,7 +93,6 @@ MediSmart 是一个集成了**知识图谱**、**大语言模型**和**智能问
 ### DevOps
 - **容器化**: Docker + Docker Compose
 - **Web服务器**: Nginx
-- **消息队列**: RabbitMQ
 - **监控**: Spring Boot Actuator
 
 ---
@@ -128,12 +127,16 @@ cp .env.example .env
 nano .env
 ```
 
-3. **启动所有服务**
+3. **自行下载必备的文件**
+- neo4j 插件
+- neo4j 数据库备份文件
+
+4. **启动所有服务**
 ```bash
 docker-compose up -d
 ```
 
-4. **访问应用**
+5. **访问应用**
 - 前端应用: http://localhost:8080
 - 后端API: http://localhost:8081
 - Neo4j浏览器: http://localhost:7474
@@ -156,14 +159,13 @@ mysql -u root -p medismart < sql/sql.sql
 **Neo4j图数据库**
 ```bash
 # 启动Neo4j
-cd neo4j-medismart
-bin/neo4j start
+neo4j start
 
 # 访问 http://localhost:7474 初始化
 # 默认用户名/密码: neo4j/password
 
 # 导入数据
-bin/neo4j-admin database import full --nodes=import/nodes.csv --relationships=import/relationships.csv
+neo4j-admin database load --overwrite-destination=true --from-path=neo4j/dumps neo4j
 ```
 
 **Redis**
@@ -204,7 +206,7 @@ cp .env.example .env
 nano .env
 
 # 启动服务
-uvicorn app.__main__:app --host 0.0.0.0 --port 8000 --reload
+python -m app --host
 ```
 
 #### 4. 前端应用
@@ -369,14 +371,14 @@ module.exports = {
 ### Q: 如何重置Neo4j数据库？
 ```bash
 # 停止Neo4j
-bin/neo4j stop
+neo4j stop
 
 # 删除数据
 rm -rf data/databases/neo4j
 rm -rf data/transactions/neo4j
 
 # 重新导入
-bin/neo4j-admin database import full --nodes=import/nodes.csv
+neo4j-admin database load --overwrite-destination=true --from-path=neo4j/dumps neo4j
 ```
 
 ### Q: 如何修改端口？
@@ -391,12 +393,6 @@ bin/neo4j-admin database import full --nodes=import/nodes.csv
 OPENAI_API_KEY=your-key
 OPENAI_BASE_URL=https://your-api-endpoint
 ```
-
-### Q: 测试失败怎么办？
-1. 检查数据库连接
-2. 确保Redis服务运行
-3. 查看测试日志定位问题
-4. 参考 [TEST_SUMMARY.md](TEST_SUMMARY.md)
 
 ---
 
