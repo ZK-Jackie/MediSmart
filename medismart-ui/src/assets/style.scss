@@ -1,0 +1,12 @@
+:root {
+  --font-1: "Inter", sans-serif;
+  --section-gap: 25px;
+  --border-radius-1: 8px;
+}
+
+.message-content p {
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 15px;
+    line-height: 1.3;
+}

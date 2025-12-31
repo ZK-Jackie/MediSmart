@@ -1,0 +1,57 @@
+services:
+  medismart-backend:
+    image: openjdk:8
+    container_name: medismart-backend
+    volumes:
+      - ./java/medismart-0.0.1-SNAPSHOT.jar:/app/medismart-0.0.1-SNAPSHOT.jar
+      - ./java/application-prod.yml:/app/application-prod.yml
+      - ./java/upload:/app/upload
+    ports:
+      - "8081:8081"
+    environment:
+      - TZ=Asia/Shanghai
+    depends_on:
+      - medismart-neo4j
+      - medismart-ai
+    command: ["java", "-jar", "/app/medismart-0.0.1-SNAPSHOT.jar", "--spring.profiles.active=prod", "--spring.config.location=/app/application-prod.yml"]
+    restart: unless-stopped
+
+  medismart-neo4j:
+    image: neo4j:5.26.5
+    container_name: medismart-neo4j
+    environment:
+      - TZ=Asia/Shanghai
+      - NEO4J_AUTH=neo4j/password
+      - NEO4J_dbms_security_procedures_unrestricted=apoc.*
+      - NEO4J_apoc_export_file_enabled=true
+      - NEO4J_apoc_import_file_use__neo4j__config=false
+    ports:
+      - "7687:7687"
+      - "7474:7474"
+    volumes:
+      - ./neo4j/data:/data
+      - ./neo4j/logs:/logs
+      - ./neo4j/import:/var/lib/neo4j/import
+      - ./neo4j/plugins:/plugins
+      - ./neo4j/backups:/backups
+      - ./neo4j/dumps:/dumps
+    restart: unless-stopped
+
+  medismart-ai:
+    image: python:3.11-slim
+    container_name: medismart-ai
+    working_dir: /app
+    ports:
+      - "8080:8080"
+    environment:
+      - TZ=Asia/Shanghai
+      - NEO4J_URI=YOUR_NEO4J_URI
+      - REDIS_HOST=YOUR_REDIS_HOST
+    volumes:
+      - ./medismart-ai/app:/app/app
+      - ./medismart-ai/entrypoint.sh:/app/entrypoint.sh
+      - ./medismart-ai/pyproject.toml:/app/pyproject.toml
+      - ./medismart-ai/uv.lock:/app/uv.lock
+      - ./medismart-ai/.env:/app/.env
+    entrypoint: [ "bash", "/app/entrypoint.sh" ]
+    restart: unless-stopped

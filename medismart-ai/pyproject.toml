@@ -1,0 +1,18 @@
+[project]
+name = "medismart-ai"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11, <3.12"
+dependencies = [
+    "fastapi>=0.115.12",
+    "langchain>=0.3.23",
+    "langchain-community>=0.3.21",
+    "langchain-neo4j>=0.4.0",
+    "langchain-openai>=0.3.12, <0.4.0",
+    "langchain-redis>=0.2.0",
+    "langgraph>=0.3.25, <0.4.0",
+    "neo4j-rust-ext>=5.28.1.0, <6.0.0.0",
+    "python-dotenv>=1.1.0",
+    "uvicorn>=0.34.0",
+]
